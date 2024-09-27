@@ -5,8 +5,8 @@ import InputLogin from '../components/InputLogin';
 import LoginButton from '../components/LoginButton';
 
 export default function Login ({navigation}) {
-    const [loginInput, setLoginInput] = useState();
-    const [senhaInput, setSenhaInput] = useState();
+    const [loginInput, setLoginInput] = useState("");
+    const [senhaInput, setSenhaInput] = useState("");
 
     const [feedback, setFeedback] = useState("");
 
