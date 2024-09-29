@@ -3,6 +3,7 @@ import {DispositivoContext} from '../context/ContextData';
 import { Text, View, StyleSheet, ImageBackground, FlatList} from 'react-native';
 import AddButton from '../components/AddButton';
 import RenderItem from '../components/RenderItem';
+import ReloadButton from '../components/ReloadButton';
 
 export default function HomeScreen({navigation}) {
     const { dispositivos, setDispositivos, fetchData } = useContext(DispositivoContext);
@@ -16,19 +17,21 @@ export default function HomeScreen({navigation}) {
                 <Text style={styles.aparelhosText}>SEUS DISPOSITIVOS:</Text>
             </View>
 
-            {dispositivos == []? 
-                <FlatList
-                style={styles.flatlist}
-                data={dispositivos}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <RenderItem item={item} navigation={navigation} />}
-                /> : 
-                <View style={{maxWidth: '80%', marginTop: 20}}>
-                <Text style={styles.nullTxt}>Você não possui nenhum dispositivo cadastrado, para adicionar um, clique no botão acima.</Text>
+            <ReloadButton fetchData={fetchData}/>
 
+            {!dispositivos? 
+                <View style={styles.backgroundTxt}>
+                    <Text style={styles.nullTxt}>Você não possui nenhum dispositivo cadastrado, ou não estão conectados. para adicionar um novo dispositivo, clique no botão ADICIONAR APARELHO.</Text>
+            
                 </View>
+                 : 
+                 <FlatList
+                 style={styles.flatlist}
+                 data={dispositivos}
+                 keyExtractor={(item) => item.id.toString()}
+                 renderItem={({ item }) => <RenderItem item={item} navigation={navigation} />}
+                 />
             }
-
 
         </ImageBackground>
     )
@@ -41,7 +44,6 @@ const styles = StyleSheet.create({
         height: '100%',
         resizeMode: "cover",
         alignItems: "center",
-        padding: 10
     },
     aparelhosText: {
         color: '#f5f5f5',
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
     },
     flatlist: {
         width: '90%',
+        height: "fit-content",
         maxHeight: 450,
         marginTop: 15,
     },
@@ -65,7 +68,15 @@ const styles = StyleSheet.create({
         color: "#f5f5f5",
         fontSize: 16,
         fontWeight: '600',
-        textAlign: 'justify'
+        textAlign: 'justify',
+        lineHeight: 24
+    },
+    backgroundTxt: {
+        padding: 10,
+        backgroundColor: 'rgba(222, 222, 222, 0.2)',
+        marginTop: 20,
+        maxWidth: '80%',
+        borderRadius: 10
     }
 
 })

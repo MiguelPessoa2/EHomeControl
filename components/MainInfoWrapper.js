@@ -17,10 +17,19 @@ export default function MainInfoWrapper({device, currentSwitch, setSwitch, navig
 
             const newDispositivos = dispositivos.filter(disp => disp.id !== device.id);
 
+            if(newDispositivos == []){
+                await AsyncStorage.setItem("userDispositivos", null);
+                setDispositivos(null);
+                Alert.alert("Dispositivo deletado com sucesso");
+                navigation.navigate("Home");
+                return
+            }
+
             await AsyncStorage.setItem("userDispositivos", JSON.stringify(newDispositivos));
             setDispositivos(newDispositivos);
             Alert.alert("Dispositivo deletado com sucesso");
             navigation.navigate("Home");
+
         }
     };
     

@@ -1,7 +1,7 @@
 import { StyleSheet, ImageBackground } from "react-native";
 import AddForm from '../components/AddForm';
 
-export default function AddAparelho(navigation) {
+export default function AddAparelho({navigation}) {
 
     return(
         <ImageBackground source={require("../assets/prism.png")} style={styles.background}>

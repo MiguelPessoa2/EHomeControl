@@ -43,7 +43,7 @@ export default function RenderItem({item, navigation}) {
     }
 
     return(
-            <View style={{borderColor: 'black', borderWidth: 5, borderTopRightRadius: 100, borderBottomRightRadius: 100}}>
+            <View style={{borderColor: 'black', borderWidth: 3, borderTopRightRadius: 100, borderBottomRightRadius: 100}}>
             <LinearGradient
             colors={['#c4c4c4', '#8f8f8f']}
             start={{x: 0, y: 0}}

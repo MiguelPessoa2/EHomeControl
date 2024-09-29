@@ -1,16 +1,16 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function AddButton ({navigation}) {
+export default function ReloadButton({fetchData}) {
 
     return (
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Adicionar")}>
+        <TouchableOpacity style={styles.button} onPress={fetchData}>
             <LinearGradient
             style={styles.gradient}
-            colors={['#0d8016', '#4bab53']}
+            colors={['#e65c00', '#ff8b3d']}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 1}}>
-                <Text style={styles.textButton}>ADICIONAR APARELHO</Text>
+                <Text style={styles.textButton}>ATUALIZAR DISPOSITIVOS</Text>
             </LinearGradient>
         </TouchableOpacity>
     )

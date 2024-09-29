@@ -5,13 +5,13 @@ import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-export default function AddForm() {
+export default function AddForm({navigation}) {
     const [nameInput, setNameInput] = useState();
     const [descInput, setDescInput] = useState();
     const [ipInput, setIpInput] = useState();
     const [isLoading, setIsLoading] = useState(false);
     
-    const handleAddAparelho = async (navigation) => {
+    const handleAddAparelho = async () => {
 
         const validateDispositivo = async () => {
             if (!nameInput || !descInput || !ipInput) {

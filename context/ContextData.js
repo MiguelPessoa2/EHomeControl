@@ -6,7 +6,7 @@ import axios from "axios";
 export const DispositivoContext = createContext();
 
 export const DispositivoProvider = ({ children }) => {
-    const [dispositivos, setDispositivos] = useState([]);
+    const [dispositivos, setDispositivos] = useState(null);
 
     const fetchData = async () => {
         try {

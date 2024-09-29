@@ -5,15 +5,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginButton ({navigation, login, password, setFeedback}) {
 
     const handleLogin = async() => {
-        const JSONud = await AsyncStorage.getItem("userData");
-        const ud = JSON.parse(JSONud);
-
-        if(ud.userName === login && ud.password === password){
-            navigation.navigate("HomeNavigator");
+        if(login == null || password == null) {
+            setFeedback("usuário ou senha incorretos.");
             return
         }
 
-        setFeedback("usuário ou senha incorretos.")
+        const JSONud = await AsyncStorage.getItem("userData");
+        const ud = JSON.parse(JSONud);
+
+        if(ud){
+            if(ud.userName === login && ud.password === password){
+                navigation.navigate("HomeNavigator");
+                return
+            }
+        }
+        setFeedback("usuário ou senha incorretos.");
+
     }
     return (
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
