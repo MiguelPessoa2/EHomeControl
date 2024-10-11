@@ -36,8 +36,8 @@ export default function AddForm({navigation}) {
 
             } catch (error) {
                 Alert.alert("Não foi possível encontrar o dispositivo com o endereço IP informado.");
-                setIsLoading(false);
-                return false;
+                setIsLoading(false)
+                return false;         
             }
         };
 
@@ -68,10 +68,9 @@ export default function AddForm({navigation}) {
                 navigation.navigate("Home");
             } catch (error) {
                 Alert.alert("Erro inesperado ao adicionar dispositivo:", error.message);
+            } finally {
+                setIsLoading(false)
             }
-
-
-
 
         }
     };

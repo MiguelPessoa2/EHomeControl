@@ -1,12 +1,12 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect, useContext, useCallback} from 'react';
 import {DispositivoContext} from '../context/ContextData';
-import { Text, View, StyleSheet, ImageBackground, FlatList} from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, FlatList, ActivityIndicator} from 'react-native';
 import AddButton from '../components/AddButton';
 import RenderItem from '../components/RenderItem';
 import ReloadButton from '../components/ReloadButton';
 
 export default function HomeScreen({navigation}) {
-    const { dispositivos, setDispositivos, fetchData } = useContext(DispositivoContext);
+    const { dispositivos, setDispositivos, fetchData, isLoading } = useContext(DispositivoContext);
 
     return (
         <ImageBackground source={require("../assets/prism.png")} style={styles.background}>
@@ -18,21 +18,23 @@ export default function HomeScreen({navigation}) {
             </View>
 
             <ReloadButton fetchData={fetchData}/>
+            {dispositivos? 
 
-            {!dispositivos? 
-                <View style={styles.backgroundTxt}>
-                    <Text style={styles.nullTxt}>Você não possui nenhum dispositivo cadastrado, ou não estão conectados. para adicionar um novo dispositivo, clique no botão ADICIONAR APARELHO.</Text>
+            <FlatList
+            style={styles.flatlist}
+            data={dispositivos}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <RenderItem item={item} navigation={navigation} />}
+            /> : 
+            <View style={{maxWidth: '80%'}}>
+            <Text style={{
+                color: '#f5f5f5',
+                fontWeight: "bold",
+                marginTop: 10,
+                textAlign: 'center'
+            }}>Você não possui nenhum dispositivo cadastrado. Adicione um para visualizá-lo aqui.</Text>
+            </View>}
             
-                </View>
-                 : 
-                 <FlatList
-                 style={styles.flatlist}
-                 data={dispositivos}
-                 keyExtractor={(item) => item.id.toString()}
-                 renderItem={({ item }) => <RenderItem item={item} navigation={navigation} />}
-                 />
-            }
-
         </ImageBackground>
     )
 }
@@ -77,6 +79,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         maxWidth: '80%',
         borderRadius: 10
+    },
+    activity: {
+        marginTop: 30,
+        
     }
 
 })

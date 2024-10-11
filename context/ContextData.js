@@ -7,8 +7,11 @@ export const DispositivoContext = createContext();
 
 export const DispositivoProvider = ({ children }) => {
     const [dispositivos, setDispositivos] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchData = async () => {
+        setIsLoading(true);
+
         try {
             const JSONdevices = await AsyncStorage.getItem("userDispositivos");
             const devices = JSONdevices ? JSON.parse(JSONdevices) : null;
@@ -21,7 +24,7 @@ export const DispositivoProvider = ({ children }) => {
                             "deviceid": "", 
                             "data": {}
                         }, {
-                            timeout: 5000,
+                            timeout: 3000,
                         });
                         return {
                             name: dispositivo.name,
@@ -47,19 +50,14 @@ export const DispositivoProvider = ({ children }) => {
             }
         } catch (error) {
             Alert.alert("Erro ao resgatar dispositivos armazenados: ", error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchData(); // Chama a função fetchData ao montar o componente
+        fetchData();
 
-        const intervalId = setInterval(() => {
-            fetchData(); // Chama fetchData periodicamente
-
-        }, 20000); // Por exemplo, a cada 10 segundos
-
-        // Limpeza do intervalo ao desmontar o componente
-        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -67,7 +65,7 @@ export const DispositivoProvider = ({ children }) => {
     }, [dispositivos])
 
     return (
-        <DispositivoContext.Provider value={{ dispositivos, setDispositivos, fetchData }}>
+        <DispositivoContext.Provider value={{ dispositivos, setDispositivos, fetchData, isLoading }}>
             {children}
         </DispositivoContext.Provider>
     );
