@@ -2,7 +2,7 @@ import { Alert, ImageBackground, ScrollView, TouchableOpacity } from 'react-nati
 import { View, Text, StyleSheet} from 'react-native';
 import { useState, useEffect, useContext, useCallback} from 'react';
 import { DispositivoContext } from '../context/ContextData';
-import { useFocusEffect } from '@react-navigation/native';
+import { LinearGradient } from "expo-linear-gradient";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -63,7 +63,29 @@ export default function MainInfoWrapper({device, currentSwitch, setSwitch, navig
                 timeout: 5000
             });
             setSwitch(newState);
+
+            const newLog = {
+                timestamp: new Date(), // Data e hora atual
+                action: newState === 'on' ? 'Ligado' : 'Desligado'
+            };
+            
+            setDispositivos((prevDispositivos) => {
+                const updatedDispositivos = prevDispositivos.map((dispositivo) =>
+                    dispositivo.id === device.id
+                        ? {
+                              ...dispositivo,
+                              data: { ...dispositivo.data, switch: newState },
+                              logs: [...(dispositivo.logs || []), newLog] // Garante que 'logs' seja um array antes de adicionar o novo log
+                          }
+                        : dispositivo // Mantém os outros dispositivos inalterados
+                );
     
+                // Atualiza o AsyncStorage com o estado mais recente
+                AsyncStorage.setItem("userDispositivos", JSON.stringify(updatedDispositivos));
+    
+                return updatedDispositivos;
+            });
+
         } catch (error) {
             Alert.alert("Houve um erro ao mudar o estado do dispositivo. ", error)
         }
@@ -80,116 +102,138 @@ export default function MainInfoWrapper({device, currentSwitch, setSwitch, navig
     }
 
     return (
-        <>
-            <View style={styles.viewWrapper}>
-                <View style={styles.viewInfo}>
-                    <Text style={styles.deviceName}>{device?.name}</Text>
-                    <Text style={styles.deviceDesc}>{device?.desc}</Text>
-                </View>
-
-                <View style={styles.viewToggleButton}>
-                    <TouchableOpacity style={styles.toggleButton} onPress={handleSwitch}>
-                        <Icon name='power-off' size={24} color='white' />
-                    </TouchableOpacity>
-
-                    <Text style={styles.switchText}>SWITCH: <Text style={{ fontWeight: 'bold', color: getColorPorEstado() }}>{currentSwitch?.toUpperCase()}</Text></Text>
-                </View>
+        <LinearGradient 
+        style={styles.container}
+        colors={['#e0e0e0', '#a8a8a8']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        >
+            <View style={styles.header}>
+                <Text style={styles.nameText}>{device.name}</Text>
             </View>
 
-            <TouchableOpacity style={styles.editInfoBtn}>
-                <Text style={styles.editText}>EDITAR</Text>
-            </TouchableOpacity>
+            <View style={styles.mainInfoContainer}>
+                <View style={styles.leftContainer}>
+                    <Text style={styles.descText}>{device.desc}</Text>
 
-            <TouchableOpacity style={styles.deleteBtn} onPress={confirmDelete} onLongPress={handleDelete}>
-                <Text style={styles.editText2}>{deleteMsg}</Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={styles.descText2}>SWITCH: </Text>
+                        <Text style={[styles.descText2, {color: getColorPorEstado()}]}>{currentSwitch?.toUpperCase()}</Text>
+                    </View>
+
+                </View>
+
+                <View style={styles.rightContainer}>
+                    <TouchableOpacity style={styles.btnEdit}>
+                            <Icon name={"pen"} size={20} />
+                        </TouchableOpacity>
+                </View>
+
+                <View style={styles.rightContainer}>
+                    <TouchableOpacity style={styles.switchButton} onPress={handleSwitch}>
+                        <Icon name={"power-off"} size={24} color="white" />
+                     </TouchableOpacity>
+                </View>
+
+            </View>
+
+            <TouchableOpacity style={styles.footer} onPress={confirmDelete} onLongPress={handleDelete}>
+                <Text style={styles.deleteText}>{deleteMsg}</Text>
             </TouchableOpacity>
-        </>
+        </LinearGradient>
     )
 }
 
 const styles = StyleSheet.create({
-    viewWrapper: {
+    container: {
         width: '100%',
-        height: 140,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 8,
-        backgroundColor: "rgba(255, 255, 255, 0.8)",
+        height: 200,
+        borderRadius: 10,
+        borderColor: 'white',
+        borderWidth: 0.5,
+        overflow: 'hidden',
+    },
+    header: {
+        width: '100%',
+        height: 40,
+        backgroundColor: '#707070',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    nameText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+    mainInfoContainer: {
+        flex: 1,
+        paddingHorizontal: 10,
+        paddingVertical: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4
+    },
+    leftContainer: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 70,
         borderRadius: 10,
         borderColor: 'black',
-        borderWidth: 4,
-        marginBottom: 10
-
-    },
-
-    viewInfo: {
-        flex: 1,
-        height: '100%',
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 6,
-        padding: 10,
-        borderRightWidth: 2,
-        borderRightColor: 'black'
-    },
-    viewToggleButton: {
-        flex: 1,
-        height: '100%',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: "center",
+        borderWidth: 1,
+        borderColor: 'rgba(148, 148, 148, 0.4)',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
         gap: 6
     },
-    deviceName: {
-        fontSize: 20,
+    rightContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    descText: {
         fontWeight: 'bold',
-        textDecorationLine: 'underline'
+        fontSize: 14,
+        color: 'black',
     },
-    deviceDesc: {
+    descText2: {
+        fontWeight: 'bold',
         fontSize: 16,
-    },
-    editInfoBtn: {
-        width: '100%',
-        height: 50,
-        borderRadius: 10,
-        marginVertical: 4,
-        justifyContent: "center",
-        alignItems: 'center',
-        backgroundColor: 'orange',
-        borderColor: 'black',
-        borderWidth: 0.5
-    },
-    toggleButton: {
-        width: 80,
-        height: 80,
-        justifyContent: "center",
-        alignItems: 'center',
-        borderRadius: 50,
-        borderColor: '#8c140b',
-        borderWidth: 4,
-        backgroundColor: '#e0675c'
+        color: 'black'
     },
     switchText: {
+        fontSize: 16,
         fontWeight: 'bold'
     },
-    editText: {
-        color: 'black',
-        fontWeight: 'bold'
-    },
-    editText2: {
-        color: '#f7f7f7',
-        fontWeight: 'bold'
-    },
-    deleteBtn: {
-        width: '100%',
-        height: 50,
-        borderRadius: 10,
-        marginVertical: 4,
-        justifyContent: "center",
+    btnEdit: {
+        height: 70,
+        width: 70,
+        backgroundColor: '#6d91a8',
+        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#a32431',
-        borderColor: 'black',
-        borderWidth: 1
+        borderRadius: 10,
+        borderColor: '#496070',
+        borderWidth: 2
+    },
+    switchButton: {
+        height: 70,
+        width: 70,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#e33939',
+        borderRadius: 40,
+        borderColor: '#780c0c',
+        borderWidth: 2
+    },
+    footer: {
+        height: 40,
+        width: '100%',
+        backgroundColor: '#bd2626',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    deleteText: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 14
     }
 })

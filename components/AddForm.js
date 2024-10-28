@@ -9,18 +9,24 @@ export default function AddForm({navigation}) {
     const [nameInput, setNameInput] = useState();
     const [descInput, setDescInput] = useState();
     const [ipInput, setIpInput] = useState();
+    const [potenciaInput, setPotenciaInput] = useState();
     const [isLoading, setIsLoading] = useState(false);
     
     const handleAddAparelho = async () => {
 
         const validateDispositivo = async () => {
-            if (!nameInput || !descInput || !ipInput) {
+            if (!nameInput || !descInput || !ipInput || !potenciaInput) {
                 Alert.alert("Preencha todos os campos para adicionar um dispositivo.");
                 return false;
             }
 
             if (nameInput.length < 4 || descInput.length < 4) {
                 Alert.alert("O nome e descrição do dispositivo devem conter mais de 3 caracteres.");
+                return false;
+            }
+
+            if (isNaN(Number(potenciaInput))) {
+                Alert.alert("Insira a potência como um número válido.");
                 return false;
             }
 
@@ -48,24 +54,47 @@ export default function AddForm({navigation}) {
             try {
                 const JSONud = await AsyncStorage.getItem("userDispositivos");
                 const ud = JSONud ? JSON.parse(JSONud) : [];
-            
-                const maxId = ud.reduce((max, dispositivo) => Math.max(max, dispositivo.id), 0);
-                const novoId = maxId + 1;
 
-                const newDispositivo = {
-                    name: nameInput,
-                    desc: descInput,
-                    ip: ipInput,
-                    data: {},
-                    id: novoId
-                };
+                    if(!ud){
+                        const newDispositivo = {
+                            name: nameInput,
+                            desc: descInput,
+                            ip: ipInput,
+                            data: {},
+                            id: 1,
+                            potencia: potenciaInput,
+                            logs: []
+                        };
+        
+                        const newDispos = [newDispositivo];
+                        await AsyncStorage.setItem("userDispositivos", JSON.stringify(newDispos));
+        
+                        Alert.alert("Dispositivo adicionado com sucesso!");
+                        navigation.navigate("Home");
 
-                ud.push(newDispositivo);
-                await AsyncStorage.setItem("userDispositivos", JSON.stringify(ud));
+                    } else {
+                        const maxId = ud.reduce((max, dispositivo) => Math.max(max, dispositivo.id), 0);
+                        const novoId = maxId + 1;
+        
+                        const newDispositivo = {
+                            name: nameInput,
+                            desc: descInput,
+                            ip: ipInput,
+                            data: {},
+                            id: novoId,
+                            potencia: potenciaInput,
+                            logs: []
+                        };
+        
+                        ud.push(newDispositivo);
+                        await AsyncStorage.setItem("userDispositivos", JSON.stringify(ud));
+        
+        
+                        Alert.alert("Dispositivo adicionado com sucesso!");
+                        navigation.navigate("Home");
 
+                    }
 
-                Alert.alert("Dispositivo adicionado com sucesso!");
-                navigation.navigate("Home");
             } catch (error) {
                 Alert.alert("Erro inesperado ao adicionar dispositivo:", error.message);
             } finally {
@@ -100,6 +129,14 @@ export default function AddForm({navigation}) {
             value={ipInput}
             onChangeText={setIpInput}
             />
+
+            <AddInput 
+            headerTitle={"Potência (W): "}
+            placeholder={"Insira a potência em Watts do dispositivo"}
+            value={potenciaInput}
+            onChangeText={setPotenciaInput}
+            />
+
             <TouchableOpacity style={styles.botaoEstilo} onPress={handleAddAparelho}>
                 <LinearGradient 
                 colors={['rgba(0, 100, 0, 0.85)', 'rgba(0, 150, 0, 0.85)', 'rgba(0, 200, 0, 0.85)']}

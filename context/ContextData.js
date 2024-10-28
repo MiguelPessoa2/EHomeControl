@@ -31,7 +31,9 @@ export const DispositivoProvider = ({ children }) => {
                             desc: dispositivo.desc,
                             id: dispositivo.id,
                             data: response.data.data,
-                            ip: dispositivo.ip
+                            ip: dispositivo.ip,
+                            potencia: dispositivo.potencia,
+                            logs: dispositivo.logs
                         };
                     } catch (apiError) {
                         console.error(`Erro ao buscar dados do dispositivo ${dispositivo.id}`, apiError);
@@ -40,7 +42,9 @@ export const DispositivoProvider = ({ children }) => {
                             desc: dispositivo.desc,
                             id: dispositivo.id,
                             data: null,
-                            ip: dispositivo.ip
+                            ip: dispositivo.ip,
+                            potencia: dispositivo.potencia,
+                            logs: dispositivo.logs
                         };
                     }
                 });
