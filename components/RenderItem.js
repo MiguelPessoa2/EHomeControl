@@ -199,11 +199,4 @@ const styles = StyleSheet.create({
     }
 })
 
-/*
-
-*/
-
-/*
-
-*/
 

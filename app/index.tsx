@@ -10,15 +10,18 @@ const Stack = createNativeStackNavigator();
 
 export default function Index() {
   return (
-    <NavigationContainer independent={true}>
-      <StatusBar hidden={true} />
+  <NavigationContainer independent={true}>
+  <StatusBar hidden={true} />
 
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{header: () => <HeaderLogin />, gestureEnabled: false}}/>
-        <Stack.Screen name="Cadastro" component={CadastroScreen} options={{header: () => <HeaderLogin />, gestureEnabled: false}}/>
-        <Stack.Screen name="HomeNavigator" component={HomeNavigator} options={{headerShown: false, gestureEnabled: false}}/>
-      </Stack.Navigator>
+  <Stack.Navigator initialRouteName="Login">
+    <Stack.Screen name="Login" component={LoginScreen} options={{header: () => <HeaderLogin />, gestureEnabled: false}}/>
+    <Stack.Screen name="Cadastro" component={CadastroScreen} options={{header: () => <HeaderLogin />, gestureEnabled: false}}/>
+    <Stack.Screen name="HomeNavigator" component={HomeNavigator} options={{headerShown: false, gestureEnabled: false}}/>
+  </Stack.Navigator>
 
-    </NavigationContainer>
-  );
+  </NavigationContainer>
+    );
 }
+/*
+
+*/
