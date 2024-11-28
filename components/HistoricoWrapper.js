@@ -37,7 +37,11 @@ export default function HistoricoWrapper({device}) {;
                 data={device.logs} // Dados dos logs
                 style={styles.flatlist}
                 keyExtractor={(device, index) => index.toString()} // Garante que cada log tenha uma chave única
-                ListEmptyComponent={<Text>Nenhum log disponível.</Text>} // Exibe mensagem caso não haja logs
+                ListEmptyComponent={
+                <View style={{flex: 1, justifyContent: "center", alignItems: 'center'}}>
+                    <Text>Nenhum registro disponível.</Text>
+                </View>
+                }
                 renderItem={renderLogItem}
             />
         </LinearGradient>
@@ -70,6 +74,6 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     flatlist: {
-        flex: 1
+        flex: 1,
     }
 })

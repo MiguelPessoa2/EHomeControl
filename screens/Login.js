@@ -3,13 +3,14 @@ import {Text, View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-n
 import {LinearGradient} from 'expo-linear-gradient';
 import InputLogin from '../components/InputLogin';
 import LoginButton from '../components/LoginButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login ({navigation}) {
     const [loginInput, setLoginInput] = useState("");
     const [senhaInput, setSenhaInput] = useState("");
 
     const [feedback, setFeedback] = useState("");
-
+    
     return(
         <ImageBackground source={require("../assets/prism.png")} style={styles.container}>
 

@@ -17,6 +17,9 @@ export default function DetalhesScreen({navigation, route}) {
     const [intervalDias, setIntervalDias] = useState(); 
     const [valorEnergia, setValorEnergia] = useState();
 
+    const [calcTempoEmMinutos, setCalcTempoEmMinutos] = useState();
+    const [calcGastoEnergia, setCalcGastoEnergia] = useState();
+    const [calcValorGasto, setCalcValorGasto] = useState();
 
     const { itemId, switchState } = route?.params;
 
@@ -52,6 +55,9 @@ export default function DetalhesScreen({navigation, route}) {
                      setInterval={setIntervalDias} 
                      consumoValue={valorEnergia} 
                      setConsumoValue={setValorEnergia}
+                     resultTempoEmMinutos={calcTempoEmMinutos}
+                     resultGastoDeEnergia={calcGastoEnergia}
+                     resultDinheiroGasto={calcValorGasto}
                      />
 
                     <CalcularConsumoBtn 
@@ -59,6 +65,10 @@ export default function DetalhesScreen({navigation, route}) {
                     logsList={selectedDevice.logs} 
                     precoEnergia={valorEnergia}
                     potencia={selectedDevice.potencia}
+                    setTempoLigado={setCalcTempoEmMinutos}
+                    setGastoEnergia={setCalcGastoEnergia}
+                    setValorGasto={setCalcValorGasto}
+
                     />
                 </View>
 

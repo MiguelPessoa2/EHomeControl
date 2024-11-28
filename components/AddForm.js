@@ -32,6 +32,7 @@ export default function AddForm({navigation}) {
 
             try {
                 setIsLoading(true);
+                console.log("ip input: ", ipInput);
                 await axios.post(`http://${ipInput}:8081/zeroconf/info`, {
                     deviceid: "",
                     data: {},
@@ -50,7 +51,7 @@ export default function AddForm({navigation}) {
         const isValid = await validateDispositivo();
 
         if (isValid) {
-
+            
             try {
                 const JSONud = await AsyncStorage.getItem("userDispositivos");
                 const ud = JSONud ? JSON.parse(JSONud) : [];

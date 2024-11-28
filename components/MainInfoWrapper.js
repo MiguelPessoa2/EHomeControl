@@ -123,11 +123,7 @@ export default function MainInfoWrapper({device, currentSwitch, setSwitch, navig
 
                 </View>
 
-                <View style={styles.rightContainer}>
-                    <TouchableOpacity style={styles.btnEdit}>
-                            <Icon name={"pen"} size={20} />
-                        </TouchableOpacity>
-                </View>
+
 
                 <View style={styles.rightContainer}>
                     <TouchableOpacity style={styles.switchButton} onPress={handleSwitch}>
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         height: 40,
-        backgroundColor: '#707070',
+        backgroundColor: '#5c5c5c',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -227,7 +223,7 @@ const styles = StyleSheet.create({
     footer: {
         height: 40,
         width: '100%',
-        backgroundColor: '#bd2626',
+        backgroundColor: '#d11d1d',
         justifyContent: 'center',
         alignItems: 'center'
     },
